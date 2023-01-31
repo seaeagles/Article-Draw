@@ -9,10 +9,24 @@ const best = document.querySelector('#best')
 const fresh = document.querySelector('#new')
 const stories = document.querySelector('#stories')
 
-console.log('top', topp)
-topp.addEventListener('click', e => fetchStories('topstories'))
-best.addEventListener('click', e => fetchStories('beststories'))
-fresh.addEventListener('click', e => fetchStories('newstories'))
+const getElement = string => document.querySelector(`#${string}`)
+
+topp.addEventListener('click', e => {
+    const f = fetchStories('top')
+    f.then(data => {
+        renderIntoDomNode(templateData(data), stories)
+    })
+})
+best.addEventListener('click', e => {
+    fetchStories('best').then(data => {
+        renderIntoDomNode(templateData(data), stories)
+    })
+})
+fresh.addEventListener('click', e => {
+    fetchStories('new').then(data => {
+      renderIntoDomNode(templateData(data), stories)
+    })
+  })
 
 async function fetchStories (path) {
     const response = await fetch(
@@ -28,8 +42,24 @@ async function fetchStories (path) {
     return storiesArray
 }
 
-function renderToDOM (data) {
+function templateData (data) {
+    console.log('new data', data)
     // loop through data
+    const list = data.map(story => {
+      return `
+        <li class='item-id' id="${story.id}">
+          <a href="${story.url}">
+            ${story.title}
+          </a> 
+          - <span>${story.by}</span>
+        </li>
+        `
+    }).join('')
     // create a string of HTML template string literals
-    // stories.innerHTML = template string
+    const ul = `<ul class='ids'>${list}</ul>`
+    return ul
+}
+
+function renderIntoDomNode(string, parent) {
+    parent.innerHTML = string
 }
