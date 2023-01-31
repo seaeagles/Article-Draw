@@ -10,7 +10,7 @@ const fresh = document.querySelector('#new')
 const stories = document.querySelector('#stories')
 
 console.log('top', topp)
-topp.addEventListener('click', e => console.log('top'))
+topp.addEventListener('click', e => fetchStories('topstories'))
 best.addEventListener('click', e => fetchStories('beststories'))
 fresh.addEventListener('click', e => fetchStories('newstories'))
 
@@ -19,11 +19,17 @@ async function fetchStories (path) {
         `https://hacker-news.firebaseio.com/v0/${path}stories.json?print=pretty`
         )
     const data = await response.json()
-    const promisesArray = await data.slice(0, 20).map(id => fetch(
+    const promisesArray = await data.slice(0, 15).map(id => fetch(
         `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
         ).then(resp => resp.json()))
 
     const storiesArray = await Promise.all(promisesArray)
     console.log('stories', stories)
     return storiesArray
+}
+
+function renderToDOM (data) {
+    // loop through data
+    // create a string of HTML template string literals
+    // stories.innerHTML = template string
 }
