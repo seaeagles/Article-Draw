@@ -33,7 +33,7 @@ async function fetchStories (path) {
         `https://hacker-news.firebaseio.com/v0/${path}stories.json?print=pretty`
         )
     const data = await response.json()
-    const promisesArray = await data.slice(0, 15).map(id => fetch(
+    const promisesArray = await data.slice(0, 30).map(id => fetch(
         `https://hacker-news.firebaseio.com/v0/item/${id}.json?print=pretty`
         ).then(resp => resp.json()))
 
